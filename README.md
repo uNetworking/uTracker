@@ -5,8 +5,10 @@ WIP - uWS pub/sub cluster master node
 A very simple set-up consists of 3 steps:
 
 1. Deploy the (one) MasterNode executable
-2. Mark your uWS instances as workers (functionality to be added to uWS itself).
+2. Mark your uWS instances as workers of this MasterNode (functionality to be added to uWS itself).
 3. Use uWSClusterConnector library in the producer to easily publish messages to this uWS cluster.
+
+Both producer and workers need to know the IP of the MasterNode.
 
 ## Problem with Redis
 Many users of uWS pub/sub use Redis to distribute a message from the producer, to many uWS instances. This works fine for small cases but introduces an extra hop and bottlenecks every single message at the Redis instance, here marked red:
