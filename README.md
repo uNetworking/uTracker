@@ -21,3 +21,6 @@ Instead of copying every single message via Redis, the idea with MasterNode (nam
 ![](Without%20Redis.png)
 
 Producers send directly to the uWS instances and use only a simple bookkeeping node, MasterNode, for keeping track of available uWS instances. Compared with Redis, MasterNode does not receive any significant traffic - it merely keeps track of online uWS instances.
+
+## Reducing internal traffic
+Even though the source(s) and uWS instaces communicate over internal LAN, one can still reduce unnecessary traffic. Because the uWS instances are directly connected to the source(s), the two parts can exchange subscription lists. By doing so, the source(s) can know which uWS instance(s) it should send a publish to. This is an optimization that really only makes sense for large amounts of uWS instances as it is typically not a problem sending LAN traffic to a handful endpoints.
