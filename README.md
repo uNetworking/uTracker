@@ -27,4 +27,4 @@ Even though the source(s) and uWS instaces communicate over internal LAN, one ca
 
 Whenever a subscription takes place in an uWS instance, and this topic is new for the uWS instance, it sends the new topic name to all connected sources. If the source goes offline, on reconnect the whole subscription list is sent again. Same goes for unsubscription; if the last subscriber to a topic unsubscribes, this removed topic name is sent to all connected sources so that they know not to send to this uWS instance.
 
-The sources can keep either a sorted set (red-black tree) or an unsorted hash map of all topics a particular uWS instance subscribes to. This allows sources to lookup in O(1) or O(log2) before sending a publish over LAN. In other words; lookup is cheap and can cull unnecessary traffic efficiently.
+The sources then need a tree where it can map outgoing publishes to uWS instances in O(log n). This is implemented in the helper library for Node.js (uWSClusterConnector) and should support wildcard supscriptions.
