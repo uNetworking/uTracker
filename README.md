@@ -24,3 +24,7 @@ Producers send directly to the uWS instances and use only a simple bookkeeping n
 
 ## Reducing internal traffic
 Even though the source(s) and uWS instaces communicate over internal LAN, one can still reduce unnecessary traffic. Because the uWS instances are directly connected to the source(s), the two parts can exchange subscription lists. By doing so, the source(s) can know which uWS instance(s) it should send a publish to. This is an optimization that really only makes sense for large amounts of uWS instances as it is typically not a problem sending LAN traffic to a handful endpoints.
+
+Whenever a subscription takes place in an uWS instance, and this topic is new for the uWS instance, it sends the new topic name to all connected sources. If the source goes offline, on reconnect the whole subscription list is sent again. Same goes for unsubscription; if the last subscriber to a topic unsubscribes, this removed topic name is sent to all connected sources so that they know not to send to this uWS instance.
+
+The sources can keep either a sorted set (red-black tree) or an unsorted hash map of all topics a particular uWS instance subscribes to. This allows sources to lookup in O(1) or O(log2) before sending a publish over LAN. In other words; lookup is cheap and can cull unnecessary traffic efficiently.
